@@ -40,12 +40,12 @@ namespace EnterpriseConsole
                 string first_element = split_command[0]; // получаем саму команду
 
                 // проверка на exit
-                if (first_element == Commands["exit"].Name) 
+                if (first_element == Commands["exit"].Name)
                 {
                     Console.WriteLine("Terminated!");
-                    break; 
+                    break;
                 }
-                
+
                 // проверка содержится ли команда в ключах словаря команд
                 if (!Commands.ContainsKey(first_element))
                 {
@@ -68,23 +68,32 @@ namespace EnterpriseConsole
                 //}
 
                 //хочу разделить параметры и значения параметров по ":"
-                //string[] getParamsValue = new string[getParamFromInput.Length];
-                //for (var paramValue = 0; paramValue < getParamsValue.Length; paramValue++)
-                //{
-                //    getParamsValue = getParamFromInput[paramValue].Split(':');
-                //    Console.WriteLine(getParamsValue);
-                //}
-
-                // проверяю праметры команды в словаре команд
-                for (var inputCommandParam = 0; inputCommandParam < getParamFromInput.Length; inputCommandParam++)
+                string[,] getParamsValue = new string[getParamFromInput.Length, 2];
+                var i = 0;
+                foreach (var paramValue in getParamFromInput)
                 {
-                    if (!Commands[first_element].Parameters.Contains(getParamFromInput[inputCommandParam]))
+                    var splitParam = paramValue.Split(":", StringSplitOptions.RemoveEmptyEntries);
+                    if (splitParam.Length < 2)
                     {
-                        Console.WriteLine($"Incorrect parameter {getParamFromInput[inputCommandParam]}");
+                        Console.WriteLine("No param value");
+                        continue;
+                    }
+
+                    getParamsValue[i, 0] = splitParam[0];
+                    getParamsValue[i, 1] = splitParam[1];
+                    i++;
+                }
+
+                var command = Commands[first_element];
+                // проверяю праметры команды в словаре команд
+                foreach (var inputCommandParam in getParamFromInput)
+                {
+                    if (!command.Parameters.Contains(inputCommandParam))
+                    {
+                        Console.WriteLine($"Incorrect parameter {inputCommandParam}");
                         continue;
                     }
                 }
-
 
                 Console.WriteLine();
 
