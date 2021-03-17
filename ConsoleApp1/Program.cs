@@ -29,7 +29,10 @@ namespace EnterpriseConsole
         static void Main(string[] args)
         {
             Console.WriteLine(@"Welcome to Enterprise test console. Type ""help"" for help.");
+
             
+            
+
             // запускаем главный цикл
             while (true)
             {
@@ -67,14 +70,26 @@ namespace EnterpriseConsole
                 //get_param_from_input.Add(split_command[j].ToString());
                 //}
 
+                //хочу разделить параметры и значения параметров по ":"
+                string[] getParamsValue = new string[getParamFromInput.Length];
+                for (var paramValue = 0; paramValue < getParamsValue.Length; paramValue++)
+                {
+                    getParamsValue = getParamFromInput[paramValue].Split(':');
+                    Console.WriteLine(getParamsValue);
+                }
 
-                // хочу разделить параметры и значения параметров по ":"
-                //string[] paramsValue = new string[getParamFromInput.Length];
-                //for (var pv = 0; pv < paramsValue.Length; pv++)
+                // проверяю праметры команды в словаре команд
+                //for (var inputCommandParam = 0; inputCommandParam < getParamFromInput.Length; inputCommandParam++)
                 //{
-                //    paramsValue[pv] = getParamFromInput[pv].Split(':');
+                //    if (!Commands[first_element].Parameters.Contains(getParamFromInput[inputCommandParam]))
+                //    {
+                //        Console.WriteLine($"Incorrect parameter {getParamFromInput[inputCommandParam]}");
+                //        continue;
+                //    }
+                  
                 //}
-                                
+              
+
                 Console.WriteLine();
 
             }
