@@ -23,15 +23,13 @@ namespace EnterpriseConsole
         static Dictionary<string, Command> Commands = new Dictionary<string, Command>()
         {
             {"start", new Command("start", "engine", "pump") },
-            {"power", new Command("power", "engine", "pump") }
+            {"power", new Command("power", "engine", "pump") },
+            {"exit", new Command("exit") }
         };
 
         static void Main(string[] args)
         {
             Console.WriteLine(@"Welcome to Enterprise test console. Type ""help"" for help.");
-
-            
-            
 
             // запускаем главный цикл
             while (true)
@@ -40,19 +38,18 @@ namespace EnterpriseConsole
                 string command_input = Convert.ToString(Console.ReadLine()); // вводим команду
                 string[] split_command = command_input.Split(' '); // бьем команду на массив строк
                 string first_element = split_command[0]; // получаем саму команду
-                
 
                 // проверка на exit
-                if (first_element == "exit") 
+                if (first_element == Commands["exit"].Name) 
                 {
                     Console.WriteLine("Terminated!");
                     break; 
                 }
-
+                
                 // проверка содержится ли команда в ключах словаря команд
                 if (!Commands.ContainsKey(first_element))
                 {
-                    Console.WriteLine($"No command {first_element}!");
+                    Console.WriteLine($"No command found {first_element}!");
                     continue;
                 }
 
@@ -71,24 +68,23 @@ namespace EnterpriseConsole
                 //}
 
                 //хочу разделить параметры и значения параметров по ":"
-                string[] getParamsValue = new string[getParamFromInput.Length];
-                for (var paramValue = 0; paramValue < getParamsValue.Length; paramValue++)
-                {
-                    getParamsValue = getParamFromInput[paramValue].Split(':');
-                    Console.WriteLine(getParamsValue);
-                }
+                //string[] getParamsValue = new string[getParamFromInput.Length];
+                //for (var paramValue = 0; paramValue < getParamsValue.Length; paramValue++)
+                //{
+                //    getParamsValue = getParamFromInput[paramValue].Split(':');
+                //    Console.WriteLine(getParamsValue);
+                //}
 
                 // проверяю праметры команды в словаре команд
-                //for (var inputCommandParam = 0; inputCommandParam < getParamFromInput.Length; inputCommandParam++)
-                //{
-                //    if (!Commands[first_element].Parameters.Contains(getParamFromInput[inputCommandParam]))
-                //    {
-                //        Console.WriteLine($"Incorrect parameter {getParamFromInput[inputCommandParam]}");
-                //        continue;
-                //    }
-                  
-                //}
-              
+                for (var inputCommandParam = 0; inputCommandParam < getParamFromInput.Length; inputCommandParam++)
+                {
+                    if (!Commands[first_element].Parameters.Contains(getParamFromInput[inputCommandParam]))
+                    {
+                        Console.WriteLine($"Incorrect parameter {getParamFromInput[inputCommandParam]}");
+                        continue;
+                    }
+                }
+
 
                 Console.WriteLine();
 
