@@ -19,24 +19,34 @@ namespace EnterpriseConsole
 
     class Program
     {
-        static Dictionary<string, Command> Commands = new Dictionary<string, Command>
+        // создаем словарь команд из экземпляров класса
+        static Dictionary<string, Command> Commands = new Dictionary<string, Command>()
         {
             {"start", new Command("start", "engine", "pump") },
             {"power", new Command("power", "engine", "pump") }
         };
+
         static void Main(string[] args)
         {
+            Console.WriteLine(@"Welcome to Enterprise test console. Type ""help"" for help.");
+            
+            // запускаем главный цикл
             while (true)
             {
-                Console.WriteLine("Enter command: ");
+                Console.Write("Enter command: ");
                 string command_input = Convert.ToString(Console.ReadLine()); // вводим команду
                 string[] split_command = command_input.Split(' '); // бьем команду на массив строк
-                string first_element = split_command[0];
-                if (first_element == "exit")
+                string first_element = split_command[0]; // получаем саму команду
+                
+
+                // проверка на exit
+                if (first_element == "exit") 
                 {
                     Console.WriteLine("Terminated!");
                     break; 
                 }
+
+                // проверка содержится ли команда в ключах словаря команд
                 if (!Commands.ContainsKey(first_element))
                 {
                     Console.WriteLine($"No command {first_element}!");
@@ -57,12 +67,15 @@ namespace EnterpriseConsole
                 //get_param_from_input.Add(split_command[j].ToString());
                 //}
 
-                //Console.WriteLine(first_element + " ");
-                foreach (string el in getParamFromInput)
-                {
-                Console.WriteLine(el + " ");
-                }
-            
+
+                // хочу разделить параметры и значения параметров по ":"
+                //string[] paramsValue = new string[getParamFromInput.Length];
+                //for (var pv = 0; pv < paramsValue.Length; pv++)
+                //{
+                //    paramsValue[pv] = getParamFromInput[pv].Split(':');
+                //}
+                                
+                Console.WriteLine();
 
             }
 
