@@ -16,6 +16,7 @@ namespace EnterpriseConsole
             Name = name;
             Parameters = parameters;
             HelpText = string.Format(helpText, name, string.Join(", ", parameters));
+
         }
     }
 
@@ -29,7 +30,7 @@ namespace EnterpriseConsole
             {"power", new Command("power", "Command \"{0}\" gives the command to increase or decrease power. Expected parameters: {1}", "engine", "pump") },
             {"exit", new Command("exit", "Shut down app") }
         };
-
+  
         static void Main(string[] args)
         {
             Console.WriteLine(@"Welcome to Enterprise test console. Type ""help"" for help.");
@@ -60,7 +61,6 @@ namespace EnterpriseConsole
                     continue;
                 }
 
-
                 // проверка на exit
                 if (first_element == Commands["exit"].Name)
                 {
@@ -81,7 +81,6 @@ namespace EnterpriseConsole
                 // получаю словарь из разделенных по ":" параметра и значения параметр и проверяю праметры команды в словаре команд
                 Dictionary<string, string> paramsAndValues = new Dictionary<string, string>();
 
-
                 foreach (var splitParamAndValue in getParamFromInput)
                 {
                     var doSplit = splitParamAndValue.Split(":", StringSplitOptions.RemoveEmptyEntries);
@@ -99,7 +98,6 @@ namespace EnterpriseConsole
                     }
                     paramsAndValues.Add(doSplit[0], doSplit[1]);
                 }
-
 
 
             }
