@@ -8,12 +8,14 @@ namespace EnterpriseConsole
     class Command
     {
         public string Name;
+        public string HelpText;
         public string[] Parameters;
 
-        public Command(string name, params string[] parameters)
+        public Command(string name, string helpText, params string[] parameters)
         {
             Name = name;
             Parameters = parameters;
+            HelpText = string.Format(helpText, name, string.Join(", ", parameters));
         }
     }
 
@@ -22,9 +24,10 @@ namespace EnterpriseConsole
         // создаем словарь команд из экземпляров класса
         static Dictionary<string, Command> Commands = new Dictionary<string, Command>()
         {
-            {"start", new Command("start", "engine", "pump") },
-            {"power", new Command("power", "engine", "pump") },
-            {"exit", new Command("exit") }
+            {"help", new Command("help","A completely useless command. But how can I refuse the Master?") },
+            {"start", new Command("start", "Command \"{0}\" gives the command to start one of the modules. Expected parameters: {1}", "engine", "pump") },
+            {"power", new Command("power", "Command \"{0}\" gives the command to increase or decrease power. Expected parameters: {1}", "engine", "pump") },
+            {"exit", new Command("exit", "Shut down app") }
         };
 
         static void Main(string[] args)
@@ -35,9 +38,28 @@ namespace EnterpriseConsole
             while (true)
             {
                 Console.Write("Enter command: ");
-                string command_input = Convert.ToString(Console.ReadLine()); // вводим команду
+                var command_input = Convert.ToString(Console.ReadLine()); // вводим команду
                 string[] split_command = command_input.Split(' '); // бьем команду на массив строк
-                string first_element = split_command[0]; // получаем саму команду
+                var first_element = split_command[0]; // получаем саму команду
+                var command = Commands[first_element];
+                // проверка на help
+                if (first_element == Commands["help"].Name)
+                {
+                    if (split_command.Length < 2)
+                    {
+                        Console.WriteLine("Expected parameters:");
+                        continue;
+                    }
+                    var forHelpCommand = split_command[1];
+                    if (!Commands.ContainsKey(forHelpCommand))
+                    {
+                        Console.WriteLine($"No command found \"{forHelpCommand}\"");
+                        continue;
+                    }
+                    Console.WriteLine(Commands[forHelpCommand].HelpText);
+                    continue;
+                }
+
 
                 // проверка на exit
                 if (first_element == Commands["exit"].Name)
@@ -49,53 +71,36 @@ namespace EnterpriseConsole
                 // проверка содержится ли команда в ключах словаря команд
                 if (!Commands.ContainsKey(first_element))
                 {
-                    Console.WriteLine($"No command found {first_element}!");
+                    Console.WriteLine($"No command found \"{first_element}\"");
                     continue;
                 }
 
+                // получаю массив с отделением от него нулевого индекса = команда
                 string[] getParamFromInput = split_command.Skip(1).ToArray();
-                // !!равнозначно
-                //string[] getParamFromInput = new string[split_command.Length-1];  
-                //for (var j = 0; j < getParamFromInput.Length; j++)
-                //{
-                //    getParamFromInput[j] = split_command[j+1];
-                //}
-                // !!равнозначно
-                //List<string> get_param_from_input = new List<string>(); // создаем новый список
-                //for (int j = 1; j < split_command.Length; j++) // отделяем команду - первый элемент массива, а оставшуюся часть массива отправляем ччилить в список из параметров
-                //{
-                //get_param_from_input.Add(split_command[j].ToString());
-                //}
 
-                //хочу разделить параметры и значения параметров по ":"
-                string[,] getParamsValue = new string[getParamFromInput.Length, 2];
-                var i = 0;
-                foreach (var paramValue in getParamFromInput)
+                // получаю словарь из разделенных по ":" параметра и значения параметр и проверяю праметры команды в словаре команд
+                Dictionary<string, string> paramsAndValues = new Dictionary<string, string>();
+
+
+                foreach (var splitParamAndValue in getParamFromInput)
                 {
-                    var splitParam = paramValue.Split(":", StringSplitOptions.RemoveEmptyEntries);
-                    if (splitParam.Length < 2)
+                    var doSplit = splitParamAndValue.Split(":", StringSplitOptions.RemoveEmptyEntries);
+
+                    if (!command.Parameters.Contains(doSplit[0]))
+                    {
+                        Console.WriteLine($"Incorrect parameter \"{doSplit[0]}\"");
+                        break;
+                    }
+
+                    if (doSplit.Length < 2)
                     {
                         Console.WriteLine("No param value");
-                        continue;
+                        break;
                     }
-
-                    getParamsValue[i, 0] = splitParam[0];
-                    getParamsValue[i, 1] = splitParam[1];
-                    i++;
+                    paramsAndValues.Add(doSplit[0], doSplit[1]);
                 }
 
-                var command = Commands[first_element];
-                // проверяю праметры команды в словаре команд
-                foreach (var inputCommandParam in getParamFromInput)
-                {
-                    if (!command.Parameters.Contains(inputCommandParam))
-                    {
-                        Console.WriteLine($"Incorrect parameter {inputCommandParam}");
-                        continue;
-                    }
-                }
 
-                Console.WriteLine();
 
             }
 
