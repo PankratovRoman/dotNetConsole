@@ -49,49 +49,33 @@ namespace EnterpriseConsole
                 // проверка содержится ли команда в ключах словаря команд
                 if (!Commands.ContainsKey(first_element))
                 {
-                    Console.WriteLine($"No command found {first_element}!");
+                    Console.WriteLine($"No command found /{first_element}/");
                     continue;
                 }
 
+                // получаю массив с отделением от него нулевого индекса = команда
                 string[] getParamFromInput = split_command.Skip(1).ToArray();
-                // !!равнозначно
-                //string[] getParamFromInput = new string[split_command.Length-1];  
-                //for (var j = 0; j < getParamFromInput.Length; j++)
-                //{
-                //    getParamFromInput[j] = split_command[j+1];
-                //}
-                // !!равнозначно
-                //List<string> get_param_from_input = new List<string>(); // создаем новый список
-                //for (int j = 1; j < split_command.Length; j++) // отделяем команду - первый элемент массива, а оставшуюся часть массива отправляем ччилить в список из параметров
-                //{
-                //get_param_from_input.Add(split_command[j].ToString());
-                //}
 
-                //хочу разделить параметры и значения параметров по ":"
-                string[,] getParamsValue = new string[getParamFromInput.Length, 2];
-                var i = 0;
-                foreach (var paramValue in getParamFromInput)
+                // получаю словарь из разделенных по ":" параметра и значения параметр 
+                Dictionary<string, string> ParamsAndValues = new Dictionary<string, string>();
+                foreach (var splitParamAndValue in getParamFromInput)
                 {
-                    var splitParam = paramValue.Split(":", StringSplitOptions.RemoveEmptyEntries);
-                    if (splitParam.Length < 2)
+                    var doSplit = splitParamAndValue.Split(":", StringSplitOptions.RemoveEmptyEntries);
+                    if (doSplit.Length < 2)
                     {
-                        Console.WriteLine("No param value");
+                        Console.WriteLine($"No param value on /{doSplit[0]}/");
                         continue;
                     }
-
-                    getParamsValue[i, 0] = splitParam[0];
-                    getParamsValue[i, 1] = splitParam[1];
-                    i++;
+                    ParamsAndValues.Add(doSplit[0], doSplit[1]);
                 }
 
-                var command = Commands[first_element];
                 // проверяю праметры команды в словаре команд
-                foreach (var inputCommandParam in getParamFromInput)
+                var command = Commands[first_element];
+                foreach (var param in ParamsAndValues.Keys) // кладу в param значения каждого ключа из словаря параметр:значение
                 {
-                    if (!command.Parameters.Contains(inputCommandParam))
+                    if (!command.Parameters.Contains(param))
                     {
-                        Console.WriteLine($"Incorrect parameter {inputCommandParam}");
-                        continue;
+                        Console.WriteLine($"Incorrect parameter /{param}/");
                     }
                 }
 
