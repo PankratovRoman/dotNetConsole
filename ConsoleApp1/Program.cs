@@ -63,7 +63,7 @@ namespace EnterpriseConsole
                     var doSplit = splitParamAndValue.Split(":", StringSplitOptions.RemoveEmptyEntries);
                     if (doSplit.Length < 2)
                     {
-                        Console.WriteLine($"No param value on /{doSplit[0]}/");
+                        Console.WriteLine("No param value");
                         continue;
                     }
                     ParamsAndValues.Add(doSplit[0], doSplit[1]);
@@ -73,6 +73,7 @@ namespace EnterpriseConsole
                 var command = Commands[first_element];
                 foreach (var param in ParamsAndValues.Keys) // кладу в param значения каждого ключа из словаря параметр:значение
                 {
+                    
                     if (!command.Parameters.Contains(param))
                     {
                         Console.WriteLine($"Incorrect parameter /{param}/");
