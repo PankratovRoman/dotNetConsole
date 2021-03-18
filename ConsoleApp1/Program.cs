@@ -15,7 +15,8 @@ namespace EnterpriseConsole
         {
             Name = name;
             Parameters = parameters;
-            HelpText = string.Format(helpText, name, string.Join(", ", parameters)); 
+            HelpText = string.Format(helpText, name, string.Join(", ", parameters));
+
         }
     }
 
@@ -59,7 +60,6 @@ namespace EnterpriseConsole
                     Console.WriteLine(Commands[forHelpCommand].HelpText);
                     continue;
                 }
-             
 
                 // проверка на exit
                 if (first_element == Commands["exit"].Name)
@@ -80,7 +80,6 @@ namespace EnterpriseConsole
 
                 // получаю словарь из разделенных по ":" параметра и значения параметр и проверяю праметры команды в словаре команд
                 Dictionary<string, string> paramsAndValues = new Dictionary<string, string>();
-                
 
                 foreach (var splitParamAndValue in getParamFromInput)
                 {
@@ -100,7 +99,6 @@ namespace EnterpriseConsole
                     paramsAndValues.Add(doSplit[0], doSplit[1]);
                 }
 
-                
 
             }
 
