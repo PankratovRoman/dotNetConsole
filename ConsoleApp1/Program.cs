@@ -41,6 +41,12 @@ namespace EnterpriseConsole
                 var command_input = Convert.ToString(Console.ReadLine()); // вводим команду
                 string[] split_command = command_input.Split(' '); // бьем команду на массив строк
                 var first_element = split_command[0]; // получаем саму команду
+                // проверка содержится ли команда в ключах словаря команд
+                if (!Commands.ContainsKey(first_element))
+                {
+                    Console.WriteLine($"No command found \"{first_element}\"");
+                    continue;
+                }
                 var command = Commands[first_element];
                 // проверка на help
                 if (first_element == Commands["help"].Name)
@@ -59,22 +65,12 @@ namespace EnterpriseConsole
                     Console.WriteLine(Commands[forHelpCommand].HelpText);
                     continue;
                 }
-
-
                 // проверка на exit
                 if (first_element == Commands["exit"].Name)
                 {
                     Console.WriteLine("Terminated!");
                     break;
-                }
-
-                // проверка содержится ли команда в ключах словаря команд
-                if (!Commands.ContainsKey(first_element))
-                {
-                    Console.WriteLine($"No command found \"{first_element}\"");
-                    continue;
-                }
-
+                }     
                 // получаю массив с отделением от него нулевого индекса = команда
                 string[] getParamFromInput = split_command.Skip(1).ToArray();
 
